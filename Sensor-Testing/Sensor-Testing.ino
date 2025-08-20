@@ -1,3 +1,32 @@
+#include <QMC5883LCompass.h>
+
+QMC5883LCompass compass;
+
+void setup() {
+  Serial.begin(9600);
+  compass.init();
+  compass.setCalibrationOffsets(-270.00, 1475.00, 2373.00);
+  compass.setCalibrationScales(1.22, 1.20, 0.74);
+  
+}
+
+void loop() {
+  int a;
+  
+  // Read compass values
+  compass.read();
+
+  // Return Azimuth reading
+  a = compass.getAzimuth();
+  
+  Serial.print("A: ");
+  Serial.print(a);
+  Serial.println();
+  
+  delay(250);
+}
+
+/*
 #include <HardwareSerial.h>
 #include <TinyGPSPlus.h>
 
@@ -24,3 +53,4 @@ void loop()
         Serial.println("VALID");
     }
 }
+*/
