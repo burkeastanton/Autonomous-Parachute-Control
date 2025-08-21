@@ -1,3 +1,5 @@
+// working compass demo
+/*
 #include <QMC5883LCompass.h>
 
 QMC5883LCompass compass;
@@ -25,6 +27,7 @@ void loop() {
   
   delay(250);
 }
+*/
 
 /*
 #include <HardwareSerial.h>
@@ -33,8 +36,8 @@ void loop() {
 // A test script to get data readings from the various sensors
 // used in this project.
 
-#define GPS_TX 17
-#define GPS_RX 16
+#define GPS_TX 10
+#define GPS_RX 9
 HardwareSerial gpsSerial(1);
 TinyGPSPlus gps;
 void setup() {
@@ -52,5 +55,41 @@ void loop()
       if (gps.encode(c)) // Did a new valid sentence come in?
         Serial.println("VALID");
     }
+} */
+
+
+
+/*
+ * Rui Santos 
+ * Complete Project Details https://randomnerdtutorials.com
+ */
+ 
+#include <TinyGPS++.h>
+#include <HardwareSerial.h>
+
+#define GPS_TX 17
+#define GPS_RX 16
+
+// The TinyGPS++ object
+TinyGPSPlus gps;
+
+// The serial connection to the GPS device
+HardwareSerial gpsSerial(1);
+
+void setup(){
+  Serial.begin(9600);
+  gpsSerial.begin(9600, SERIAL_8N1, GPS_RX, GPS_TX);
 }
-*/
+
+void loop(){
+  // This sketch displays information every time a new sentence is correctly encoded.
+  while (gpsSerial.available() > 0){
+    gps.encode(gpsSerial.read());
+    if (gps.location.isUpdated()){
+      Serial.print("Latitude= "); 
+      Serial.print(gps.location.lat(), 6);
+      Serial.print(" Longitude= "); 
+      Serial.println(gps.location.lng(), 6);
+    }
+  }
+}
